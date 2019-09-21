@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>RSA Chat</title>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<style>
+	@import url(https://fonts.googleapis.com/css?family=Open+Sans);
+
+
+
+body{
+   background-color: #263238;
+  font-family: 'Open Sans', sans-serif;
+}
+
+h3{
+  color:#ecf0f1;
+}
+
+p{
+  padding-top:10px;
+  color:#ecf0f1;
+  font-size:1.0em;
+}
+
+
+a{
+  color:#f1c40f;  
+}
+
+
+ a:hover {
+    color: #efa039;
+    text-decoration: none;
+}
+
+label {
+  color:#ecf0f1;
+  padding-top:10px;
+  font-size:1.6rem;
+}
+
+.label-register{
+ color:rgba(0, 109, 128, 0.52);
+}
+
+.remember{
+	color: white;
+}
+.remember input
+{
+	width: 20px;
+	height: 20px;
+	margin-left: 15px;
+	margin-right: 5px;
+}
+
+button{
+  margin-top:20px;
+}
+
+.border-login{
+  border-right:1px solid #fff;
+  min-height:450px;
+  float:right;
+}
+
+.space-top{
+  padding-top:50px;
+}
+
+.modal-header {
+    min-height: 16.42857143px;
+    padding: 9px;
+    border-bottom: 1px solid #e5e5e5;
+    background: #263238;
+    color: #fff;
+    border-top: 1px solid #e65100;
+    border-radius: 0;
+}
+
+.modal-footer {
+    padding: 9px;
+    text-align: right;
+    border-top: 1px solid #607D8B;
+}
+
+.modal-content {
+    position: relative;
+    background-color: #CFD8DC;
+    -webkit-background-clip: padding-box;
+    background-clip: padding-box;
+    border-left: 1px solid #e65100;
+    border-right: 1px solid #e65100;
+    border-bottom: 1px solid #e65100;
+    border-radius: 0;
+    outline: 0;
+  }
+
+.btn {
+    display: inline-block;
+    padding: 6px 12px;
+    margin-bottom: 0;
+    font-size: 14px;
+    font-weight: normal;
+    line-height: 1.42857143;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    -ms-touch-action: manipulation;
+    touch-action: manipulation;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    background-image: none;
+    /* border: 1px solid transparent; */
+    border-radius: 3px;
+}
+.logo {
+  font: 84px 'Arial Narrow', sans-serif;/* I picked this font because it's the closest looking 'web safe' font http://cssfontstack.com/ */
+  color: #fefefe;
+  text-transform: uppercase;
+  letter-spacing: -4px;
+  align: center;
+  margin-top: 20%;
+}
+
+/* stuff for both words */
+.logo span {
+  position: relative;
+}
+.logo span:before,
+.logo span:after {
+  content: '';
+  position: absolute;
+  border-width: 32px;/* makes a nice, big 64px square */
+  border-style: solid;
+  border-color: transparent;
+  height: 0;
+  z-index: 10;
+}
+
+/* stuff for 1st word */
+.logo .word1 {
+  color: #dc006c;
+  margin-right: -38px;
+  transform: rotateY(180deg);/* using Prefix free */
+  display: flex;/* required for transform */
+  z-index: 10;/* stack 1st word on top */
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+}
+.logo .word1:before {
+  right: -3px;/* would be left, but we flipped the word */
+  top: -9px;
+  border-top-color: #282828;/* match background color */
+  border-right-color: #282828;/* would be left, but we flipped the word */
+}
+.logo .word1:after {
+  left: 17px;/* would be right, but we flipped the word */
+  bottom: -15px;
+  border-bottom-color: #282828;
+  border-left-color: #282828;/* would be right, but we flipped the word */
+}
+
+/* stuff for 2nd word */
+.logo .word2 {
+  z-index: 0;/* stack 2nd word below */
+}
+.logo .word2:before {
+  left: -4px;
+  top: -6px;
+  border-top-color: #282828;
+  border-left-color: #282828;
+}
+.logo .word2:after {
+  right: -4px;  
+  bottom: 4px;
+  border-bottom-color: #282828;
+  border-right-color: #282828;
+}
+</style>
+</head>
+<body>
+	<nav class="navbar navbar-expand-sm bg-dark navbar-dark fixed-top">
+	 <a class="navbar-brand" href="#">RSA Chat</a>
+	 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+	 <span class="navbar-toggler-icon"></span>
+	 </button>
+	 <div class="collapse navbar-collapse" id="collapsibleNavbar">
+	 	<ul class="navbar-nav ml-auto">
+	 	<li class="nav-item">
+	 	<a class="nav-link" href="#">Home</a>
+	 	</li>
+	 	<li class="nav-item">
+	 	<a class="nav-link" href="#">Encrypt</a>
+	 	</li>
+	 	<li class="nav-item">
+	 	<a class="nav-link" href="#">About us</a>
+	 	</li>
+	 	</ul>
+	 </div>
+	</nav>
+	<div class="container " style="margin-top: 100px;">
+    <div class="row">
+	<div class="col-sm-6 col-md-5 hidden-xs hidden-sm border-right">   
+    	<h1 class="logo ">
+		  <span class="word1 mr-auto">RSA</span>
+		  <span class="word2">Chat</span>
+		</h1>
+  	</div>
+    <div class="col-sm-12 col-xs-12 col-md-4 ">            
+		<div class="space-top pl-2">
+      		<h3 class="text-center">Sign In</h3>
+          	<form class="form-signin" class="form-horizontal" action="login" method="get">
+            	<div class="input-group form-group">
+					<div class="input-group-prepend">
+						<span class="input-group-text"><i class="fas fa-user"></i></span>
+					</div>
+					<input type="text" class="form-control" placeholder="username" required name="username">	
+				</div>
+             	<div class="input-group form-group">
+						<div class="input-group-prepend">
+							<span class="input-group-text"><i class="fas fa-key"></i></span>
+						</div>
+						<input type="password" class="form-control" placeholder="password" name="password">
+					</div>
+					<div class="row justify-content-start remember">
+						<input type="checkbox">Remember Me
+					</div>
+               <button class="btn btn-lg btn-primary btn-block" type="submit">
+                    Login
+            </button>   
+                </form>
+            </div>
+          
+            <p class="text-center"> I don't have account!  <a href="#myModal"  data-toggle="modal" data-target="#myModal"> Sign Up!</a></p>
+           
+
+<!-- Modal -->
+<form action="register" method="post">
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" style="margin-top: 100px;">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="myModalLabel">Welcome to RSA Chat!</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      </div>
+      <div class="modal-body">
+      
+        
+        <div class="form-group">
+		    <label class="label-register">First Name</label>  
+		    <input type="text" class="form-control" name="firstname" placeholder="Enter your first name" required>
+		</div>
+		<div class="form-group">
+		    <label class="label-register">Last Name</label>  
+		    <input type="text" class="form-control" name="lastname" placeholder="Enter your last name" required>
+		</div>
+		<div class="form-group">
+		    <label class="label-register">Gender</label>  
+		    <div class="d-flex justify-content-md-start"><input type="radio" class="mt-1"  name="gender" value="M" checked="checked"><h6>Male</h6></div>
+		   	<div class="d-flex justify-content-md-start"><input type="radio" class="mt-1"  name="gender" value="F"><h6>Female</h6></div>
+		</div>
+		
+        
+         <div class="form-group">
+    <label class="label-register">User Name</label>
+          
+    <input type="text" class="form-control" name="username" placeholder="Enter your user name" required>
+  </div>
+        
+        
+  <div class="form-group">
+    <label class="label-register" >E-mail</label>
+    <input type="email" class="form-control" name="email" placeholder="Enter your e-mail!" >
+  </div>
+  <div class="form-group">
+    <label class="label-register">Password</label>
+    <input type="password" class="form-control" name="password" placeholder="*****" required>
+  </div>
+        
+         <div class="form-group">
+    <label class="label-register">Confirm password</label>
+    <input type="password" class="form-control" id="passwordconfirm" placeholder="******" required>
+  </div>
+  
+  
+
+      </div>
+      <div class="modal-footer">
+        <div class="pull-left">
+           <button type="submit" class="btn btn-primary">Register</button>
+          
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+       
+          </div>
+      </div>
+    </div>
+  </div>
+</div>
+        </form>  
+        </div>
+    </div>
+</div>
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+</body>
+</html>
